@@ -43,23 +43,31 @@ public class Ground : MonoBehaviour {
         // Sets color of ground based on bools
         if(startOnn && onn) {
             // Color for when ground is on and its day
+            if(insideCollider != null)
+                insideCollider.SetActive(true);
+                
             collider.enabled = true;
-            insideCollider.SetActive(true);
             groundRenderer.material.color = startOnColorDay;
         } else if(startOnn && onn == false) {
             // Color for when ground is off and its night
+            if(insideCollider != null)
+                insideCollider.SetActive(false);
+                
             collider.enabled = false;
-            insideCollider.SetActive(false);
             groundRenderer.material.color = startOffColorNight;
         } else if(startOnn == false && onn) {
             // Color for when ground is off and its day
+            if(insideCollider != null)
+                insideCollider.SetActive(false);
+
             collider.enabled = false;
-            insideCollider.SetActive(false);
             groundRenderer.material.color = startOffColorDay;
         } else if(startOnn == false && onn == false) {
             // Color for when ground is on and its night
+            if(insideCollider != null)
+                insideCollider.SetActive(true);
+
             collider.enabled = true;
-            insideCollider.SetActive(true);
             groundRenderer.material.color = startOnColorNight;
         }
     }

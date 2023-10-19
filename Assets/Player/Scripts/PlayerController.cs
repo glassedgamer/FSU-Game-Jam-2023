@@ -1,22 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+    // [SerializeField] GameObject beanGFX;
+
     [SerializeField] Rigidbody2D rb;
-    //[SerializeField] Animator animator;
+    [SerializeField] Animator animator;
     [SerializeField] SpriteRenderer playerRenderer;
+    [SerializeField] CapsuleCollider2D collider;
+
+    GameObject levelChanger;
     GameObject gameManager;
-    [SerializeField] Transform respawnPoint;
+
+    // [SerializeField] Transform respawnPoint;
 
     [SerializeField] Color playerDay;
     [SerializeField] Color playerNight;
 
     Vector2 movement;
+    // Vector3 rotation;
 
-    [SerializeField] float respawnTimeValue;
+    // [SerializeField] float respawnTimeValue;
     
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] float jumpForce = 2f;
@@ -35,6 +43,9 @@ public class PlayerController : MonoBehaviour {
         gameManager = GameObject.FindWithTag("GameManager");
         // playerRenderer = this.gameObject.GetComponent<SpriteRenderer>();
         onnn = gameManager.GetComponent<GameManager>().on;
+        // levelChanger = GameObject.FindWithTag("LevelChanger");
+        
+        // rotation = new Vector3(0f, 0f, 0f);
 
         changeColor();
     }
@@ -47,11 +58,11 @@ public class PlayerController : MonoBehaviour {
         
         rb.velocity = movement;
         
-        /*if(movement != Vector2.zero && isGrounded) {
+        if(movement != Vector2.zero && isGrounded) {
             animator.SetBool("isWalking", true);
         } else if(movement == Vector2.zero){
             animator.SetBool("isWalking", false);
-        } */
+        } 
 
         if(facingRight == false && inputX > 0) {
             Flip();
@@ -78,7 +89,7 @@ public class PlayerController : MonoBehaviour {
 
     public void Jump(InputAction.CallbackContext context) {
         if(isGrounded) {
-            //animator.SetTrigger("jump");
+            animator.SetTrigger("Jump");
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
     }
@@ -87,10 +98,13 @@ public class PlayerController : MonoBehaviour {
         gameManager.GetComponent<GameManager>().OnOff();
     }
 
-    void respawn() {
-        this.gameObject.transform.position = respawnPoint.position;
-        this.gameObject.SetActive(true);
-    }
+    // void respawn() {
+    //     collider.enabled = true;
+    //     this.gameObject.transform.position = respawnPoint.position;
+    //     beanGFX.gameObject.transform.GetChild(0).eulerAngles = rotation;
+    //     beanGFX.SetActive(true);
+    //     Debug.Log("Fortnite");
+    // }
 
     void changeColor() {
         if(onnn) {
@@ -100,13 +114,17 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    void OnCollisionEnter2D(Collision2D col) {
-        if(col.gameObject.tag == "InsideCollider") {
-            Debug.Log("lol");
-            this.gameObject.SetActive(false);
-            Invoke("respawn", respawnTimeValue);
-        }
-    }
+    // void OnCollisionEnter2D(Collision2D col) {
+    //     if(col.gameObject.tag == "InsideCollider") {
+    //         Debug.Log("lol");
+    //         beanGFX.SetActive(false);
+    //         collider.enabled = false;
+    //         Invoke("respawn", respawnTimeValue);
+    //     } else if(col.gameObject.tag == "Star") {
+    //         levelChanger.GetComponent<LevelChanger>().LoadNextLevel();
+    //         Destroy(col.gameObject);
+    //     }
+    // }
 
     void OnDrawGizmosSelected() {
         Gizmos.color = Color.red;
