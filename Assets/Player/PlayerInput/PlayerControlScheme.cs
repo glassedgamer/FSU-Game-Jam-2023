@@ -156,6 +156,94 @@ public partial class @PlayerControlScheme : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Menu"",
+            ""id"": ""91f25d79-2df0-41d4-a25b-e21147b3fe0c"",
+            ""actions"": [
+                {
+                    ""name"": ""Enter"",
+                    ""type"": ""Button"",
+                    ""id"": ""5384de89-a91b-4627-a65c-0af6a4d9ff01"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""3a6a375c-732e-4181-b5e7-5cfeaefe8583"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""M"",
+                    ""type"": ""Button"",
+                    ""id"": ""e724d09e-d350-4561-994d-724b382bf205"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""S"",
+                    ""type"": ""Button"",
+                    ""id"": ""a3356b98-56e7-4003-b723-47810251d4bb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""fe2ec92c-8048-4f1b-860b-78793f7c53d6"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Enter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4bdc79d6-5f29-4ebc-9cae-21050c8776b8"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7688247f-5de0-4f66-a761-2d983d6dc264"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""M"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b03c045-99cc-4b4b-af83-a5afeaf27679"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""S"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -165,6 +253,12 @@ public partial class @PlayerControlScheme : IInputActionCollection2, IDisposable
         m_Movement_OnOffThing = m_Movement.FindAction("OnOff Thing", throwIfNotFound: true);
         m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
         m_Movement_Jump = m_Movement.FindAction("Jump", throwIfNotFound: true);
+        // Menu
+        m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
+        m_Menu_Enter = m_Menu.FindAction("Enter", throwIfNotFound: true);
+        m_Menu_Pause = m_Menu.FindAction("Pause", throwIfNotFound: true);
+        m_Menu_M = m_Menu.FindAction("M", throwIfNotFound: true);
+        m_Menu_S = m_Menu.FindAction("S", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -269,10 +363,74 @@ public partial class @PlayerControlScheme : IInputActionCollection2, IDisposable
         }
     }
     public MovementActions @Movement => new MovementActions(this);
+
+    // Menu
+    private readonly InputActionMap m_Menu;
+    private IMenuActions m_MenuActionsCallbackInterface;
+    private readonly InputAction m_Menu_Enter;
+    private readonly InputAction m_Menu_Pause;
+    private readonly InputAction m_Menu_M;
+    private readonly InputAction m_Menu_S;
+    public struct MenuActions
+    {
+        private @PlayerControlScheme m_Wrapper;
+        public MenuActions(@PlayerControlScheme wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Enter => m_Wrapper.m_Menu_Enter;
+        public InputAction @Pause => m_Wrapper.m_Menu_Pause;
+        public InputAction @M => m_Wrapper.m_Menu_M;
+        public InputAction @S => m_Wrapper.m_Menu_S;
+        public InputActionMap Get() { return m_Wrapper.m_Menu; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MenuActions set) { return set.Get(); }
+        public void SetCallbacks(IMenuActions instance)
+        {
+            if (m_Wrapper.m_MenuActionsCallbackInterface != null)
+            {
+                @Enter.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnEnter;
+                @Enter.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnEnter;
+                @Enter.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnEnter;
+                @Pause.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnPause;
+                @M.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnM;
+                @M.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnM;
+                @M.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnM;
+                @S.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnS;
+                @S.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnS;
+                @S.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnS;
+            }
+            m_Wrapper.m_MenuActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Enter.started += instance.OnEnter;
+                @Enter.performed += instance.OnEnter;
+                @Enter.canceled += instance.OnEnter;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
+                @M.started += instance.OnM;
+                @M.performed += instance.OnM;
+                @M.canceled += instance.OnM;
+                @S.started += instance.OnS;
+                @S.performed += instance.OnS;
+                @S.canceled += instance.OnS;
+            }
+        }
+    }
+    public MenuActions @Menu => new MenuActions(this);
     public interface IMovementActions
     {
         void OnOnOffThing(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+    }
+    public interface IMenuActions
+    {
+        void OnEnter(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
+        void OnM(InputAction.CallbackContext context);
+        void OnS(InputAction.CallbackContext context);
     }
 }

@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] Animator animator;
     [SerializeField] SpriteRenderer playerRenderer;
     [SerializeField] CapsuleCollider2D collider;
+    [SerializeField] AudioSource walkingSound;
 
     GameObject levelChanger;
     GameObject gameManager;
@@ -60,8 +61,12 @@ public class PlayerController : MonoBehaviour {
         
         if(movement != Vector2.zero && isGrounded) {
             animator.SetBool("isWalking", true);
+            walkingSound.enabled = true;
+            // FindObjectOfType<AudioManager>().Play("Walking");
         } else if(movement == Vector2.zero){
             animator.SetBool("isWalking", false);
+            walkingSound.enabled = false;
+            // FindObjectOfType<AudioManager>().Stop("Walking");
         } 
 
         if(facingRight == false && inputX > 0) {
@@ -89,13 +94,16 @@ public class PlayerController : MonoBehaviour {
 
     public void Jump(InputAction.CallbackContext context) {
         if(isGrounded) {
+            walkingSound.enabled = false;
             animator.SetTrigger("Jump");
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            FindObjectOfType<AudioManager>().Play("Jump");
         }
     }
 
     public void OnOffThing(InputAction.CallbackContext context) {
         gameManager.GetComponent<GameManager>().OnOff();
+        FindObjectOfType<AudioManager>().Play("OnOff");
     }
 
     // void respawn() {

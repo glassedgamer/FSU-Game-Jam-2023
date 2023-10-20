@@ -10,12 +10,26 @@ public class MainMenuButtons : MonoBehaviour {
     public GameObject mainMenu;
     public GameObject credits;
 
+    AudioSource lobbyMusic;
+
+    // [SerializeField] bool playMusic;
+
     void Start() {
         levelChanger = GameObject.FindWithTag("LevelChanger");
         mainMenu.SetActive(true);
+
+        lobbyMusic = GameObject.FindWithTag("LobbyMusic").GetComponent<AudioSource>();
+
+        lobbyMusic.enabled = true;
+        
+        // if(playMusic)
+        //     FindObjectOfType<AudioManager>().Play("Jaz(yy)z");
     }
 
     public void Play() {
+        // FindObjectOfType<AudioManager>().Stop("Jaz(yy)z");
+        // FindObjectOfType<AudioManager>().mainMenu = false;
+        lobbyMusic.enabled = false;
         levelChanger.GetComponent<LevelChanger>().LoadFirstLevel();
     }
 

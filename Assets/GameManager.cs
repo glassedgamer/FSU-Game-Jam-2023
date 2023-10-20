@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour {
     void Start() {
         switchEnvironment();
         increaseDeathCounter();
+
+        FindObjectOfType<AudioManager>().mainMenu = false;
     }
 
     void Update() {
