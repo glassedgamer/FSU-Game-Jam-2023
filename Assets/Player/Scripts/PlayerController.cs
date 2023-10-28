@@ -102,8 +102,10 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnOffThing(InputAction.CallbackContext context) {
-        gameManager.GetComponent<GameManager>().OnOff();
-        FindObjectOfType<AudioManager>().Play("OnOff");
+        if(context.started) {
+            gameManager.GetComponent<GameManager>().OnOff();
+            FindObjectOfType<AudioManager>().Play("OnOff");
+        }
     }
 
     // void respawn() {

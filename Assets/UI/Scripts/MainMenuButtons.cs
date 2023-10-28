@@ -9,6 +9,7 @@ public class MainMenuButtons : MonoBehaviour {
 
     public GameObject mainMenu;
     public GameObject credits;
+    public GameObject howToPlay;
 
     AudioSource lobbyMusic;
 
@@ -29,6 +30,7 @@ public class MainMenuButtons : MonoBehaviour {
     public void Play() {
         // FindObjectOfType<AudioManager>().Stop("Jaz(yy)z");
         // FindObjectOfType<AudioManager>().mainMenu = false;
+        GameManager.playerDeathCount = 0;
         lobbyMusic.enabled = false;
         levelChanger.GetComponent<LevelChanger>().LoadFirstLevel();
     }
@@ -36,11 +38,19 @@ public class MainMenuButtons : MonoBehaviour {
     public void SwitchToMainMenu() {
         mainMenu.SetActive(true);
         credits.SetActive(false);
+        howToPlay.SetActive(false);
     }
 
     public void SwitchToCredits() {
         mainMenu.SetActive(false);
         credits.SetActive(true);
+        howToPlay.SetActive(false);
+    }
+
+    public void SwitchToHowToPlay() {
+        mainMenu.SetActive(false);
+        credits.SetActive(false);
+        howToPlay.SetActive(true);
     }
 
     public void Quit() {
